@@ -25,6 +25,10 @@ const schema = new Schema(
       type: String,
       trim: true,
     },
+    traits: {
+      type: String,
+      trim: true,
+    },
     first_mention: {
       type: String,
       trim: true,
