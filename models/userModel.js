@@ -1,7 +1,8 @@
-import { Schema, model } from "mongoose";
-import { isStrongPassword } from "validator";
-import isEmail from "validator/lib/isEmail";
-import { comparePassword, hashPassword } from "../lib/helpers";
+import { Schema, SchemaTypes, model } from "mongoose";
+import validator from "validator";
+import isEmail from "validator/lib/isEmail.js";
+import { comparePassword, hashPassword } from "../lib/helpers.js";
+const { isStrongPassword } = validator;
 
 const schema = new Schema({
   email: {
@@ -17,6 +18,11 @@ const schema = new Schema({
     type: String,
     enum: ["admin", "user"],
     default: "user",
+  },
+  favorites: {
+    type: [SchemaTypes.ObjectId],
+    ref: "Creature",
+    default: null,
   },
 });
 

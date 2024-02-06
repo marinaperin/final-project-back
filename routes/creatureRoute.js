@@ -1,5 +1,6 @@
 import express from "express";
 import Creature from "../models/creatureModel.js";
+import { adminOnly } from "../lib/helpers.js";
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.get("/", async (req, res) => {
     return res.status(200).send(creatures);
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Server error");
+    return res.status(error.statusCode).send(error.message);
   }
 });
 
@@ -30,9 +31,12 @@ router.get("/:id", async (req, res) => {
     return res.status(200).send(creature);
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Server error");
+    return res.status(error.statusCode).send(error.message);
   }
 });
+
+//middleware to protect routes from normal users and only admin can access
+router.use(adminOnly());
 
 //POST creature
 router.post("/", async (req, res) => {
@@ -44,7 +48,7 @@ router.post("/", async (req, res) => {
     return res.status(201).send(creature);
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Server error");
+    return res.status(error.statusCode).send(error.message);
   }
 });
 
@@ -71,7 +75,7 @@ router.patch("/:id", async (req, res) => {
     return res.status(200).send(updatedCreature);
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Server error");
+    return res.status(error.statusCode).send(error.message);
   }
 });
 
@@ -90,7 +94,7 @@ router.delete("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Server error");
+    return res.status(error.statusCode).send(error.message);
   }
 });
 
