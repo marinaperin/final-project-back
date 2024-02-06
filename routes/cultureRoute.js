@@ -8,7 +8,7 @@ const router = express.Router();
 //GET All cultures
 router.get("/", async (req, res) => {
   try {
-    const resources = await Culture.find().sort({ name: -1 });
+    const resources = await Culture.find().sort({ name: 1 });
     const cultures = [];
     for (let i = 0; i < resources.length; i++) {
       const culture = resources[i].toObject();
@@ -46,7 +46,7 @@ router.get("/:id", async (req, res) => {
 });
 
 ////middleware to protect routes from normal users and only admin can access
-router.use(adminOnly())
+/* router.use(adminOnly()) */
 
 //POST culture
 router.post("/", async (req, res) => {

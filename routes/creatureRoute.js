@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const creatures = await Creature.find()
-      .sort({ name: -1 })
+      .sort({ name: 1 })
       .populate({ path: "culture", select: "name country" })
       .populate("event", "title");
     return res.status(200).send(creatures);
@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //middleware to protect routes from normal users and only admin can access
-router.use(adminOnly());
+/* router.use(adminOnly()); */
 
 //POST creature
 router.post("/", async (req, res) => {

@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use("/user", userRoute);
 
 //middleware authorization
-app.use(requireAuth());
+/* app.use(requireAuth()); */
 
 //routes
 app.use("/creatures", creatureRoute);

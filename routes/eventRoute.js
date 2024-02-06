@@ -8,17 +8,19 @@ const router = express.Router();
 //GET All events
 router.get("/", async (req, res) => {
   try {
-    const resources = await Event.find().sort({ name: -1 });
+    const resources = await Event.find()
+      .sort({ name: 1 })
+      .populate("culture", "name country");
     const events = [];
     for (let i = 0; i < resources.length; i++) {
       const event = resources[i].toObject();
-      const total_creatures = await Creature.countDocuments({
+      const creatures = await Creature.find({
         event: event._id,
       });
-      events.push = {
+      events.push({
         ...event,
-        total_creatures,
-      };
+        creatures,
+      });
     }
     return res.status(200).send(events);
   } catch (error) {
@@ -49,7 +51,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //middleware to protect routes from normal users and only admin can access
-router.use(adminOnly());
+/* router.use(adminOnly()); */
 
 //POST event
 router.post("/", async (req, res) => {
@@ -99,14 +101,14 @@ router.patch("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const creature = await Creature.findById(id);
-    if (!creature) {
+    const event = await Event.findById(id);
+    if (!event) {
       return res.status(404).send("Not found");
     } else {
-      await Creature.findByIdAndDelete(id);
+      await Event.findByIdAndDelete(id);
       return res
         .status(200)
-        .send(`Creature with id ${id} was successfully deleted`);
+        .send(`Event with id ${id} was successfully deleted`);
     }
   } catch (error) {
     console.error(error);
