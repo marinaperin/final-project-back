@@ -25,10 +25,6 @@ const schema = new Schema(
   { timestamps: true }
 );
 
-schema.statics.findByName = (name) => {
-  return this.find({ name: name });
-};
-
 const Culture = model("Culture", schema);
 
 export default Culture;

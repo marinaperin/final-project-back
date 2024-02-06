@@ -18,23 +18,19 @@ const schema = new Schema(
       type: String,
       trim: true,
     },
-    date: [Date],
+    date: [String],
     first_mention: {
       type: String,
       trim: true,
     },
     culture: {
-      type: [SchemaTypes.ObjectId],
+      type: SchemaTypes.ObjectId,
       ref: "Culture",
       default: null,
     },
   },
   { timestamps: true }
 );
-
-schema.statics.findByProp = (prop, value) => {
-  return this.find({ [prop]: value });
-};
 
 const Event = model("Event", schema);
 

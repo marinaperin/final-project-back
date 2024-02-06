@@ -8,12 +8,12 @@ const schema = new Schema(
       trim: true,
     },
     culture: {
-      type: [SchemaTypes.ObjectId],
+      type: SchemaTypes.ObjectId,
       ref: "Culture",
       default: null,
     },
     type: {
-      type: String,
+      type: [String],
       required: true,
       trim: true,
     },
@@ -26,7 +26,7 @@ const schema = new Schema(
       trim: true,
     },
     traits: {
-      type: String,
+      type: [String],
       trim: true,
     },
     first_mention: {
@@ -37,18 +37,14 @@ const schema = new Schema(
       type: String,
       trim: true,
     },
-    events: {
-      type: [SchemaTypes.ObjectId],
+    event: {
+      type: SchemaTypes.ObjectId,
       ref: "Event",
       default: null,
     },
   },
   { timestamps: true }
 );
-
-schema.statics.findByProp = (prop, value) => {
-  return this.find({ [prop]: value });
-};
 
 const Creature = model("Creature", schema);
 
