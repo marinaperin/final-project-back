@@ -4,6 +4,7 @@ import Creature from "../models/creatureModel.js";
 
 const router = express.Router();
 
+//GET All cultures
 router.get("/", async (req, res) => {
   try {
     const resources = await Culture.find().sort({ name: -1 });
@@ -25,6 +26,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+//GET culture by id
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -42,6 +44,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//POST culture
 router.post("/", async (req, res) => {
   if (!req.body) {
     return res.status(400).send("Send a valid culture");
@@ -55,6 +58,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+//PATCH culture by id
 router.patch("/:id", async (req, res) => {
   const propCount = Object.keys(req.body).length;
   if (!req.body || propCount < 0) {
@@ -81,6 +85,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+//DELETE culture by id
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {

@@ -12,14 +12,17 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+//middlewares
 app.use(morgan("dev"));
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
+//routes
 app.use("/creatures", creatureRoute);
 app.use("/cultures", cultureRoute);
 app.use("/events", eventRoute);
 
+//connection to Mongo and activate server
 mongoose
   .connect(MONGO_URI)
   .then(() => {

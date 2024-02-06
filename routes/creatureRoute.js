@@ -3,6 +3,7 @@ import Creature from "../models/creatureModel.js";
 
 const router = express.Router();
 
+//GET All creatures
 router.get("/", async (req, res) => {
   try {
     const creatures = await Creature.find()
@@ -16,6 +17,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+//GET single creature by id
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -32,6 +34,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//POST creature
 router.post("/", async (req, res) => {
   if (!req.body) {
     return res.status(400).send("Send a valid creature");
@@ -45,6 +48,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+//PATCH creature by id (prefer patch instead of put because it allows to change only a few properties and not all are needed)
 router.patch("/:id", async (req, res) => {
   const propCount = Object.keys(req.body).length;
   if (!req.body || propCount < 0) {
@@ -71,6 +75,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+//DELETE creature by id
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {

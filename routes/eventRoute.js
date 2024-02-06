@@ -4,6 +4,7 @@ import Creature from "../models/creatureModel.js";
 
 const router = express.Router();
 
+//GET All events
 router.get("/", async (req, res) => {
   try {
     const resources = await Event.find().sort({ name: -1 });
@@ -25,6 +26,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+//GET event by id
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -36,7 +38,7 @@ router.get("/:id", async (req, res) => {
       return res.status(404).send("Not found");
     }
     const event = resource.toObject();
-    const creatures = await Creature.find({ events: id });
+    const creatures = await Creature.find({ event: id });
     event.creatures = creatures;
     return res.status(200).send(event);
   } catch (error) {
@@ -45,6 +47,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//POST event
 router.post("/", async (req, res) => {
   if (!req.body) {
     return res.status(400).send("Send a valid event");
@@ -58,6 +61,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+//PATCH event by id
 router.patch("/:id", async (req, res) => {
   const propCount = Object.keys(req.body).length;
   if (!req.body || propCount < 0) {
@@ -78,7 +82,7 @@ router.patch("/:id", async (req, res) => {
       "culture",
       "name country"
     );
-    const creatures = await Creature.find({ events: id });
+    const creatures = await Creature.find({ event: id });
     updatedEvent.creatures = creatures;
     return res.status(200).send(updatedEvent);
   } catch (error) {
@@ -87,6 +91,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+//DELETE event by id
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
