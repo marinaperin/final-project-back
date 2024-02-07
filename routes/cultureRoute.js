@@ -1,14 +1,20 @@
 import express from "express";
 import Culture from "../models/cultureModel.js";
 import Creature from "../models/creatureModel.js";
-import { adminOnly } from "../lib/helpers.js";
+import { adminOnly, capitalize } from "../lib/helpers.js";
 
 const router = express.Router();
 
 //GET All cultures
 router.get("/", async (req, res) => {
+  const queryObj = req.query;
+  const keys = Object.keys(queryObj);
+  if (keys.length > 0) {
+    const query = capitalize(queryObj[keys[0]]);
+    queryObj[keys[0]] = query;
+  }
   try {
-    const resources = await Culture.find().sort({ name: 1 });
+    const resources = await Culture.find(queryObj).sort({ name: 1 });
     const cultures = [];
     for (let i = 0; i < resources.length; i++) {
       const culture = resources[i].toObject();

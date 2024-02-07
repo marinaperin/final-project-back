@@ -1,16 +1,23 @@
 import express from "express";
 import Creature from "../models/creatureModel.js";
-import { adminOnly } from "../lib/helpers.js";
+import { adminOnly, capitalize } from "../lib/helpers.js";
 
 const router = express.Router();
 
 //GET All creatures
 router.get("/", async (req, res) => {
+  const queryObj = req.query;
+  const keys = Object.keys(queryObj);
+  if (keys.length > 0) {
+    const query = capitalize(queryObj[keys[0]]);
+    queryObj[keys[0]] = query;
+    console.log(queryObj);
+  }
   try {
-    const creatures = await Creature.find()
+    const creatures = await Creature.find(queryObj)
       .sort({ name: 1 })
       .populate({ path: "culture", select: "name country" })
-      .populate("event", "title");
+      .populate("event", "name");
     return res.status(200).send(creatures);
   } catch (error) {
     console.error(error);
@@ -24,7 +31,7 @@ router.get("/:id", async (req, res) => {
   try {
     const creature = await Creature.findById(id)
       .populate("culture", "name country")
-      .populate("event", "title");
+      .populate("event", "name");
     if (!creature) {
       return res.status(404).send("Not found");
     }
@@ -71,7 +78,7 @@ router.patch("/:id", async (req, res) => {
     await creature.save();
     const updatedCreature = await Creature.findById(id)
       .populate("culture", "name country")
-      .populate("event", "title");
+      .populate("event", "name");
     return res.status(200).send(updatedCreature);
   } catch (error) {
     console.error(error);

@@ -1,14 +1,20 @@
 import express from "express";
 import Event from "../models/eventModel.js";
 import Creature from "../models/creatureModel.js";
-import { adminOnly } from "../lib/helpers.js";
+import { adminOnly, capitalize } from "../lib/helpers.js";
 
 const router = express.Router();
 
 //GET All events
 router.get("/", async (req, res) => {
+  const queryObj = req.query;
+  const keys = Object.keys(queryObj);
+  if (keys.length > 0) {
+    const query = capitalize(queryObj[keys[0]]);
+    queryObj[keys] = query;
+  }
   try {
-    const resources = await Event.find()
+    const resources = await Event.find(queryObj)
       .sort({ name: 1 })
       .populate("culture", "name country");
     const events = [];
@@ -16,7 +22,7 @@ router.get("/", async (req, res) => {
       const event = resources[i].toObject();
       const creatures = await Creature.find({
         event: event._id,
-      });
+      }).select('name');
       events.push({
         ...event,
         creatures,

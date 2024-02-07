@@ -17,7 +17,7 @@ const schema = new Schema(
     continent: {
       type: String,
       trim: true,
-      maxLength: 10,
+      maxLength: 20,
     },
     religions: [String],
     languages: [String],

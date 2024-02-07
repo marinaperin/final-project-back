@@ -13,7 +13,7 @@ const run = async () => {
       .then(console.log("Connected to MongoDB successfully"));
     const { data } = await axios.get("https://restcountries.com/v3.1/all");
     const cultures = data.map((c) => ({
-      name: `${c.demonyms.eng.m} culture`,
+      name: `${c.demonyms.eng.m} Culture`,
       country: c.name.common,
       continent: c.continents[0],
       religions: [],
