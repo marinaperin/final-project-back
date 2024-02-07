@@ -21,6 +21,7 @@ const schema = new Schema(
     },
     religions: [String],
     languages: [String],
+    img: String,
   },
   { timestamps: true }
 );

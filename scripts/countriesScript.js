@@ -10,27 +10,31 @@ const run = async () => {
   try {
     await mongoose
       .connect(MONGO_URI)
-      .then(console.log("Connected to MongoDB successfully"));
+    console.log("Connected to MongoDB successfully");
     const { data } = await axios.get("https://restcountries.com/v3.1/all");
-    const cultures = data.map((c) => ({
-      name: `${c.demonyms.eng.m} Culture`,
-      country: c.name.common,
-      continent: c.continents[0],
-      religions: [],
-      languages: Object.values(c.languages),
-    }));
+    console.log(data);
+    if (data !== undefined && data !== null) {
+      const cultures = data.map((c) => ({
+        name: `${c.demonyms.eng.m} Culture`,
+        country: c.name.common,
+        continent: c.continents[0],
+        religions: [],
+        languages: c.languages ? (Object.values(c.languages)) : [],
+        img: c.flags.svg
+      }));
 
-    cultures.forEach(async c => {
-        const exists = await Culture.findOne({country: c.country})
-        if(exists){
-            console.log('Already created');
-        }else{
-            await Culture.create(c);
-            console.log(`${c.country} created successfully`);
+      cultures.forEach(async (c) => {
+        const exists = await Culture.findOne({ country: c.country });
+        if (exists) {
+          console.log("Already created");
+        } else {
+          await Culture.create(c);
+          console.log(`${c.country} created successfully`);
         }
-    })
+      });
+    }
   } catch (error) {
     console.error(error);
   }
 };
-
+run();

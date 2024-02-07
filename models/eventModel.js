@@ -28,6 +28,7 @@ const schema = new Schema(
       ref: "Culture",
       default: null,
     },
+    img: String,
   },
   { timestamps: true }
 );

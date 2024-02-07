@@ -42,6 +42,7 @@ const schema = new Schema(
       ref: "Event",
       default: null,
     },
+    img: String,
   },
   { timestamps: true }
 );

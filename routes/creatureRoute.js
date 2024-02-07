@@ -11,7 +11,6 @@ router.get("/", async (req, res) => {
   if (keys.length > 0) {
     const query = capitalize(queryObj[keys[0]]);
     queryObj[keys[0]] = query;
-    console.log(queryObj);
   }
   try {
     const creatures = await Creature.find(queryObj)
@@ -21,7 +20,7 @@ router.get("/", async (req, res) => {
     return res.status(200).send(creatures);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -31,14 +30,14 @@ router.get("/:id", async (req, res) => {
   try {
     const creature = await Creature.findById(id)
       .populate("culture", "name country")
-      .populate("event", "name");
+      .populate("event", "name type description first_mention");
     if (!creature) {
       return res.status(404).send("Not found");
     }
     return res.status(200).send(creature);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -55,7 +54,7 @@ router.post("/", async (req, res) => {
     return res.status(201).send(creature);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -82,7 +81,7 @@ router.patch("/:id", async (req, res) => {
     return res.status(200).send(updatedCreature);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -101,7 +100,7 @@ router.delete("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
