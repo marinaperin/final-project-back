@@ -9,29 +9,36 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const queryObj = req.query;
   const keys = Object.keys(queryObj);
-  if (keys.length > 0) {
+  if (keys.length > 0 && !keys.includes("page")) {
     const query = capitalize(queryObj[keys[0]]);
     queryObj[keys] = query;
   }
   try {
-    const resources = await Event.find(queryObj)
-      .sort({ name: 1 })
-      .populate("culture", "name country");
-    const events = [];
-    for (let i = 0; i < resources.length; i++) {
-      const event = resources[i].toObject();
-      const creatures = await Creature.find({
-        event: event._id,
-      }).select('name');
-      events.push({
-        ...event,
-        creatures,
+    if (keys.includes("page")) {
+      const events = await Event.paginate(req.query.page, 20, {
+        name: 1,
       });
+      return res.status(200).send(events);
+    } else {
+      const resources = await Event.find(queryObj)
+        .sort({ name: 1 })
+        .populate("culture", "name country");
+      const events = [];
+      for (let i = 0; i < resources.length; i++) {
+        const event = resources[i].toObject();
+        const creatures = await Creature.find({
+          event: event._id,
+        }).select("name");
+        events.push({
+          ...event,
+          creatures,
+        });
+      }
+      return res.status(200).send(events);
     }
-    return res.status(200).send(events);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -52,7 +59,7 @@ router.get("/:id", async (req, res) => {
     return res.status(200).send(event);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -69,7 +76,7 @@ router.post("/", async (req, res) => {
     return res.status(201).send(event);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -99,7 +106,7 @@ router.patch("/:id", async (req, res) => {
     return res.status(200).send(updatedEvent);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -118,7 +125,7 @@ router.delete("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 

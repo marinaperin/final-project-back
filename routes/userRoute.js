@@ -23,7 +23,7 @@ router.post("/sign-up", async (req, res) => {
     return res.status(201).send("User created successfully");
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -45,7 +45,7 @@ router.post("/log-in", async (req, res) => {
     return res.status(202).send("User logged in successfully");
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -64,7 +64,7 @@ router.get("/favorites", async (req, res) => {
     return res.status(200).send(creatures);
   } catch (error) {
     console.error(error);
-    return res.status().send();
+    return res.status(500).send(error.message);
   }
 });
 
@@ -82,7 +82,7 @@ router.patch("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 

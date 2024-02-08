@@ -8,16 +8,23 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const queryObj = req.query;
   const keys = Object.keys(queryObj);
-  if (keys.length > 0) {
+  if (keys.length > 0 && !keys.includes("page")) {
     const query = capitalize(queryObj[keys[0]]);
     queryObj[keys[0]] = query;
   }
   try {
-    const creatures = await Creature.find(queryObj)
-      .sort({ name: 1 })
-      .populate({ path: "culture", select: "name country" })
-      .populate("event", "name");
-    return res.status(200).send(creatures);
+    if (keys.includes("page")) {
+      const creatures = await Creature.paginate(req.query.page, 20, {
+        name: 1,
+      });
+      return res.status(200).send(creatures);
+    } else {
+      const creatures = await Creature.find(queryObj)
+        .sort({ name: 1 })
+        .populate({ path: "culture", select: "name country" })
+        .populate("event", "name");
+      return res.status(200).send(creatures);
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).send(error.message);

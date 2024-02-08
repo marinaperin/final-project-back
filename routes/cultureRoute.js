@@ -9,27 +9,34 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const queryObj = req.query;
   const keys = Object.keys(queryObj);
-  if (keys.length > 0) {
+  if (keys.length > 0 && !keys.includes("page")) {
     const query = capitalize(queryObj[keys[0]]);
     queryObj[keys[0]] = query;
   }
   try {
-    const resources = await Culture.find(queryObj).sort({ name: 1 });
-    const cultures = [];
-    for (let i = 0; i < resources.length; i++) {
-      const culture = resources[i].toObject();
-      const total_creatures = await Creature.countDocuments({
-        culture: culture._id,
+    if (keys.includes("page")) {
+      const cultures = await Culture.paginate(req.query.page, 20, {
+        name: 1,
       });
-      cultures.push({
-        ...culture,
-        total_creatures,
-      });
+      return res.status(200).send(cultures);
+    } else {
+      const resources = await Culture.find(queryObj).sort({ name: 1 });
+      const cultures = [];
+      for (let i = 0; i < resources.length; i++) {
+        const culture = resources[i].toObject();
+        const total_creatures = await Creature.countDocuments({
+          culture: culture._id,
+        });
+        cultures.push({
+          ...culture,
+          total_creatures,
+        });
+      }
+      return res.status(200).send(cultures);
     }
-    return res.status(200).send(cultures);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -47,7 +54,7 @@ router.get("/:id", async (req, res) => {
     return res.status(200).send(culture);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -64,7 +71,7 @@ router.post("/", async (req, res) => {
     return res.status(201).send(culture);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -91,7 +98,7 @@ router.patch("/:id", async (req, res) => {
     return res.status(200).send(updatedCulture);
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
@@ -110,7 +117,7 @@ router.delete("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 

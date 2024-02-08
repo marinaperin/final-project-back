@@ -47,6 +47,19 @@ const schema = new Schema(
   { timestamps: true }
 );
 
+schema.statics.paginate = async function (page, itemCount, sortOrder) {
+  const skipCount = (page - 1) * itemCount;
+  const total_results = await this.countDocuments();
+  const total_pages = Math.ceil(total_results / itemCount);
+  const results = await this.find()
+    .sort(sortOrder)
+    .skip(skipCount)
+    .limit(itemCount)
+    .populate('culture', 'name country')
+    .populate('event', 'name');
+  return { page, results, total_pages, total_results };
+};
+
 const Creature = model("Creature", schema);
 
 export default Creature;
