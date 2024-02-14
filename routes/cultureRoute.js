@@ -1,6 +1,7 @@
 import express from "express";
 import Culture from "../models/cultureModel.js";
 import Creature from "../models/creatureModel.js";
+import Event from "../models/eventModel.js";
 import { adminOnly, capitalize } from "../lib/helpers.js";
 
 const router = express.Router();
@@ -51,6 +52,8 @@ router.get("/:id", async (req, res) => {
     const culture = resource.toObject();
     const creatures = await Creature.find({ culture: id });
     culture.creatures = creatures;
+    const events = await Event.find({ culture: id });
+    culture.events = events;
     return res.status(200).send(culture);
   } catch (error) {
     console.error(error);
