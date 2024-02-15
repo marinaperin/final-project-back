@@ -64,6 +64,13 @@ schema.statics.logIn = async function (email, password) {
   return user;
 };
 
+schema.methods.resUser = function(){
+  const user = this.toObject();
+  delete user.password;
+  delete user.__v;
+  return user;
+}
+
 const User = model("User", schema);
 
 export default User;

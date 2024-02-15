@@ -20,7 +20,7 @@ router.post("/sign-up", async (req, res) => {
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.status(201).send("User created successfully");
+    return res.status(201).send(user.resUser());
   } catch (error) {
     console.error(error);
     return res.status(500).send(error.message);
@@ -42,25 +42,24 @@ router.post("/log-in", async (req, res) => {
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.status(202).send("User logged in successfully");
+    return res.status(202).send(user.resUser());
   } catch (error) {
     console.error(error);
     return res.status(500).send(error.message);
   }
 });
 
-//GET user by id
-router.get("/favorites", async (req, res) => {
-  const { id } = req.user;
+//GET user favorites
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
   try {
     const creatures = [];
-    req.user.favorites.forEach(async (f) => {
-      const creature = await Creature.findOne({ id: id });
-      creatures.push({
-        ...creatures,
-        creature,
-      });
-    });
+    const user = await User.findById(id);
+    for (let i = 0; i < user.favorites.length; i++) {
+      const creature = await Creature.findById(user.favorites[i].toString());
+      creatures.push(creature);
+    }
     return res.status(200).send(creatures);
   } catch (error) {
     console.error(error);
@@ -68,17 +67,30 @@ router.get("/favorites", async (req, res) => {
   }
 });
 
-//PATCH user by id
-router.patch("/:id", async (req, res) => {
-  const { id } = req.user;
+//PATCH user favorites by id
+router.patch("/favorites", async (req, res) => {
+  const { id, action, userId } = req.body;
+  console.log(userId, id, action);
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).send("User not found");
     } else {
-      user.favorites.push(...user.favorites, req.body);
-      await user.save();
-      return res.status(200).send("Added to favorites successfully");
+      if (action === "add") {
+        if (user.favorites.includes(id)) {
+          return res.status(400).send('Already added');
+        } else {
+          user.favorites.push(id);
+          await user.save();
+          const userToSend = await User.findById(userId);
+          return res.status(200).send(userToSend.resUser());
+        }
+      } else if (action === "remove") {
+        user.favorites.splice(user.favorites.indexOf(id), 1);
+        await user.save();
+        const userToSend = await User.findById(userId);
+        return res.status(200).send(userToSend.resUser());
+      }
     }
   } catch (error) {
     console.error(error);
