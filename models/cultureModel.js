@@ -17,6 +17,7 @@ const schema = new Schema(
     },
     continent: {
       type: String,
+      required: true,
       trim: true,
       maxLength: 20,
     },

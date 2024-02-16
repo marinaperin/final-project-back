@@ -52,7 +52,6 @@ router.post("/log-in", async (req, res) => {
 //GET user favorites
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const creatures = [];
     const user = await User.findById(id);
@@ -70,7 +69,6 @@ router.get("/:id", async (req, res) => {
 //PATCH user favorites by id
 router.patch("/favorites", async (req, res) => {
   const { id, action, userId } = req.body;
-  console.log(userId, id, action);
   try {
     const user = await User.findById(userId);
     if (!user) {

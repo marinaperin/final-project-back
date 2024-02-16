@@ -49,7 +49,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //middleware to protect routes from normal users and only admin can access
-/* router.use(adminOnly()); */
+router.use(adminOnly());
 
 //POST creature
 router.post("/", async (req, res) => {
