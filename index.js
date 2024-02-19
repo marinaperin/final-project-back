@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import { requireAuth } from "./lib/helpers.js";
 dotenv.config();
 const { MONGO_URI } = process.env;
 const PORT = process.env.PORT || 3000;
@@ -31,9 +30,6 @@ app.use(cookieParser());
 
 //user routes
 app.use("/user", userRoute);
-
-//middleware authorization
-app.use(requireAuth());
 
 //routes
 app.use("/creatures", creatureRoute);
