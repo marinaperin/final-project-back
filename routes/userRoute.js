@@ -2,7 +2,7 @@ import express from "express";
 import User from "../models/userModel.js";
 import Creature from "../models/creatureModel.js";
 import { createToken } from "../lib/helpers.js";
-import { requireAuth } from "./lib/helpers.js";
+import { requireAuth } from "../lib/helpers.js";
 
 const router = express.Router();
 
@@ -80,7 +80,7 @@ router.patch("/favorites", async (req, res) => {
     } else {
       if (action === "add") {
         if (user.favorites.includes(id)) {
-          return res.status(400).send('Already added');
+          return res.status(400).send("Already added");
         } else {
           user.favorites.push(id);
           await user.save();
