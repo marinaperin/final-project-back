@@ -21,7 +21,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://final-project-front-ashy.vercel.app/",
+      "https://final-project-front-ashy.vercel.app",
     ],
     credentials: true,
   })
