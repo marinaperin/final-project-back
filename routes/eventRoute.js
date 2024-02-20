@@ -1,7 +1,7 @@
 import express from "express";
 import Event from "../models/eventModel.js";
 import Creature from "../models/creatureModel.js";
-import { adminOnly, capitalize } from "../lib/helpers.js";
+import { adminOnly, capitalize, requireAuth } from "../lib/helpers.js";
 
 const router = express.Router();
 
@@ -64,6 +64,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //middleware to protect routes from normal users and only admin can access
+router.use(requireAuth());
 router.use(adminOnly());
 
 //POST event

@@ -2,7 +2,7 @@ import express from "express";
 import Culture from "../models/cultureModel.js";
 import Creature from "../models/creatureModel.js";
 import Event from "../models/eventModel.js";
-import { adminOnly, capitalize } from "../lib/helpers.js";
+import { adminOnly, capitalize, requireAuth } from "../lib/helpers.js";
 
 const router = express.Router();
 
@@ -62,7 +62,8 @@ router.get("/:id", async (req, res) => {
 });
 
 ////middleware to protect routes from normal users and only admin can access
-router.use(adminOnly())
+router.use(requireAuth());
+router.use(adminOnly());
 
 //POST culture
 router.post("/", async (req, res) => {
