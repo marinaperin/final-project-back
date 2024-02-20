@@ -33,6 +33,9 @@ router.get("/", async (req, res) => {
           total_creatures,
         });
       }
+      if(cultures.length === 0){
+        return res.status(404).send('Not Found')
+      }
       return res.status(200).send(cultures);
     }
   } catch (error) {
