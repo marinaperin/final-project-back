@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 });
 
@@ -44,7 +44,7 @@ router.get("/:id", async (req, res) => {
     return res.status(200).send(creature);
   } catch (error) {
     console.error(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 });
 
@@ -62,7 +62,7 @@ router.post("/", async (req, res) => {
     return res.status(201).send(creature);
   } catch (error) {
     console.error(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 });
 
@@ -89,7 +89,7 @@ router.patch("/:id", async (req, res) => {
     return res.status(200).send(updatedCreature);
   } catch (error) {
     console.error(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 });
 
@@ -108,7 +108,7 @@ router.delete("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 });
 

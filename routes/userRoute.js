@@ -24,7 +24,7 @@ router.post("/sign-up", async (req, res) => {
     return res.status(201).send(user.resUser());
   } catch (error) {
     console.error(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 });
 
@@ -46,7 +46,7 @@ router.post("/log-in", async (req, res) => {
     return res.status(202).send(user.resUser());
   } catch (error) {
     console.error(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 });
 
@@ -66,7 +66,7 @@ router.get("/:id", async (req, res) => {
     return res.status(200).send(creatures);
   } catch (error) {
     console.error(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 });
 
@@ -96,7 +96,7 @@ router.patch("/favorites", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 });
 
