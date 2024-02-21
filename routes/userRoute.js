@@ -24,7 +24,8 @@ router.post("/sign-up", async (req, res) => {
     return res.status(201).send(user.resUser());
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode || 500).send(error);
+    return res.status(error.statusCode).send(error);
+
   }
 });
 
@@ -46,7 +47,8 @@ router.post("/log-in", async (req, res) => {
     return res.status(202).send(user.resUser());
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode || 500).send(error);
+    return res.status(error.statusCode).send(error);
+
   }
 });
 
