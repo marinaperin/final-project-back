@@ -25,6 +25,7 @@ router.post("/sign-up", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(error.statusCode).send(error);
+
   }
 });
 
@@ -47,6 +48,7 @@ router.post("/log-in", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(error.statusCode).send(error);
+
   }
 });
 
