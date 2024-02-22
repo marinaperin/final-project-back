@@ -4,28 +4,31 @@ import isEmail from "validator/lib/isEmail.js";
 import { comparePassword, hashPassword } from "../lib/helpers.js";
 const { isStrongPassword } = validator;
 
-const schema = new Schema({
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
+const schema = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    user_type: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
+    favorites: {
+      type: [SchemaTypes.ObjectId],
+      ref: "Creature",
+      default: null,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  user_type: {
-    type: String,
-    enum: ["admin", "user"],
-    default: "user",
-  },
-  favorites: {
-    type: [SchemaTypes.ObjectId],
-    ref: "Creature",
-    default: null,
-  },
-});
+  { timestamps: true }
+);
 
 //Sign Up static with multiple validation and check
 schema.statics.signUp = async function (email, password) {
