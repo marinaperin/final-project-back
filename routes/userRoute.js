@@ -25,7 +25,6 @@ router.post("/sign-up", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(error.statusCode).send(error);
-
   }
 });
 
@@ -48,7 +47,6 @@ router.post("/log-in", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(error.statusCode).send(error);
-
   }
 });
 
@@ -63,7 +61,11 @@ router.get("/:id", async (req, res) => {
     const user = await User.findById(id);
     for (let i = 0; i < user.favorites.length; i++) {
       const creature = await Creature.findById(user.favorites[i].toString());
-      creatures.push(creature);
+      if (creature === null) {
+        continue;
+      } else {
+        creatures.push(creature);
+      }
     }
     return res.status(200).send(creatures);
   } catch (error) {

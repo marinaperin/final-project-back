@@ -1,6 +1,7 @@
 import express from "express";
 import Creature from "../models/creatureModel.js";
 import { adminOnly, capitalize, requireAuth } from "../lib/helpers.js";
+import User from "../models/userModel.js";
 
 const router = express.Router();
 
@@ -101,6 +102,15 @@ router.delete("/:id", async (req, res) => {
     if (!creature) {
       return res.status(404).send("Not found");
     } else {
+      const users = await User.find();
+      for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+        const favorites = user.favorites.map((f) => f.toString());
+        if (favorites.includes(id)) {
+          await user.removeFavorite(id);
+          console.log("Favorite removed successfully");
+        }
+      }
       await Creature.findByIdAndDelete(id);
       return res
         .status(200)

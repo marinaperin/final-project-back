@@ -64,12 +64,21 @@ schema.statics.logIn = async function (email, password) {
   return user;
 };
 
-schema.methods.resUser = function(){
+schema.methods.removeFavorite = async function (creatureId) {
+  const favorites = this.favorites.map((f) => f.toString());
+  if (favorites.includes(creatureId)) {
+    favorites.splice(favorites.indexOf(creatureId), 1);
+    this.favorites = favorites;
+    await this.save();
+  }
+};
+
+schema.methods.resUser = function () {
   const user = this.toObject();
   delete user.password;
   delete user.__v;
   return user;
-}
+};
 
 const User = model("User", schema);
 
