@@ -16,6 +16,7 @@ const app = express();
 
 //middlewares
 app.use(morgan("dev"));
+app.use(express.json());
 app.use(
   cors({
     origin: [
@@ -25,7 +26,6 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
 app.use(cookieParser());
 
 //user routes
